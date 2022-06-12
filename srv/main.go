@@ -3,7 +3,6 @@ package main
 import (
 	"CloverHealth/srv/fileParser"
 	"fmt"
-	"strconv"
 
 	"github.com/pkg/errors"
 )
@@ -15,27 +14,23 @@ func main() {
 	formatFileName := "../specs/fileformat1.csv"
 	dataFileName := "../data/fileformat1_2022-06-07.txt"
 
-	if data, err = fileParser.ParseFlatfile(formatFileName, dataFileName); err != nil {
+	if data, err = fileParser.ParseFlatFile(formatFileName, dataFileName); err != nil {
 		fmt.Printf("ERROR: %+v\r\n", errors.Wrap(err, ""))
 
 		return
 	}
 
+	//fmt.Printf("%#v\n", data)
 	fmt.Println(data)
 
 	for _, v := range data {
-		switch v.Type {
-		case "TEXT":
-			fmt.Printf("Value: %#v\n", v.Value.(string))
-		case "BOOLEAN":
-			if v.Value == "1" {
-				fmt.Printf("Value: %#v\n", true)
-			} else if v.Value == "0" {
-				fmt.Printf("Value: %#v\n", false)
-			}
-		case "INTEGER":
-			intVar, _ := strconv.Atoi(v.Value.(string))
-			fmt.Printf("Value: %#v\n", intVar)
+		switch v.Value.(type) {
+		case string:
+			fmt.Printf("Type: %T, val: %v\n", v.Value, v.Value)
+		case bool:
+			fmt.Printf("Type: %T, val: %v\n", v.Value, v.Value)
+		case int:
+			fmt.Printf("Type: %T, val: %v\n", v.Value, v.Value)
 		}
 	}
 }
