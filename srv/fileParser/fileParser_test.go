@@ -261,6 +261,31 @@ func Test_readDataLine(t *testing.T) {
 			[]Data{},
 			false,
 		},
+		{
+			"invalid data",
+			args{
+				line: "Diabetes  -  1",
+				formats: []Format{
+					{
+						ColumnName: "name",
+						Width:      10,
+						DateType:   "TEXT",
+					},
+					{
+						ColumnName: "valid",
+						Width:      1,
+						DateType:   "BOOLEAN",
+					},
+					{
+						ColumnName: "count",
+						Width:      3,
+						DateType:   "INTEGER",
+					},
+				},
+			},
+			[]Data{},
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
