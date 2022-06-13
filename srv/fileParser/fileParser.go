@@ -21,24 +21,24 @@ type Data struct {
 }
 
 // ParseFlatFile ...
-func ParseFlatFile(formatFileName, dataFileName string) ([]Data, error) {
+func ParseFlatFile(formatFileName, dataFileName string) ([]Format, []Data, error) {
 	var err error
 	var formats []Format
 	var res []Data
 
 	if formats, err = ParseFormatFile(formatFileName); err != nil {
-		return res, err
+		return formats, res, err
 	}
 
 	var bytes []byte
 
 	if bytes, err = ioutil.ReadFile(dataFileName); err != nil {
-		return res, err
+		return formats, res, err
 	}
 
 	// Check if the file is empty
 	if len(bytes) == 0 {
-		return res, errors.New("file is empty")
+		return formats, res, errors.New("file is empty")
 	}
 
 	lines := strings.Split(string(bytes), "\n")
@@ -47,13 +47,13 @@ func ParseFlatFile(formatFileName, dataFileName string) ([]Data, error) {
 
 	for _, line := range lines {
 		if records, err = readDataLine(line, formats); err != nil {
-			return res, err
+			return formats, res, err
 		}
 
 		res = append(res, records...)
 	}
 
-	return res, nil
+	return formats, res, nil
 }
 
 // parseFormatFile ...
